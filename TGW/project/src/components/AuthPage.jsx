@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation
 import { ArrowRight, Lock, Mail } from 'lucide-react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from './firebase'; // Import Firebase auth
+import { auth } from '../firebase'; // Import Firebase auth
 
 const AuthPage = () => {
   const [email, setEmail] = useState('');

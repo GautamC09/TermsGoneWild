@@ -48,7 +48,7 @@ const NavBar = () => {
           </Link>
           
           <nav className="hidden md:flex items-center space-x-8">
-            {['Features', 'How it Works', 'Testimonials'].map((item) => (
+            {['Features', 'How it Works' ].map((item) => (
               <Link
                 key={item}
                 to={`/${item.toLowerCase().replace(/\s+/g, '-')}`}
@@ -88,7 +88,7 @@ const NavBar = () => {
       {mobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg animate-slide-down">
           <div className="container mx-auto px-6 py-4 flex flex-col space-y-4">
-            {['Features', 'How it Works', 'Testimonials'].map((item) => (
+            {['Features', 'How it Works'].map((item) => (
               <Link
                 key={item}
                 to={`/${item.toLowerCase().replace(/\s+/g, '-')}`}

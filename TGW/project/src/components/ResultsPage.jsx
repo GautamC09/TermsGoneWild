@@ -126,13 +126,6 @@ const ResultsPage = () => {
           <ArrowLeft size={16} className="mr-2" /> Back
         </button>
 
-        {/* Search New Link Button */}
-        <button
-          onClick={handleSearchNewLink}
-          className="flex items-center text-sm text-muted-foreground hover:text-foreground mb-8"
-        >
-          <Search size={16} className="mr-2" /> Search New Link
-        </button>
 
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-display font-bold">Analysis Results</h2>
@@ -170,6 +163,12 @@ const ResultsPage = () => {
               className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-600"
             >
               View Summary
+            </button>
+            <button
+              onClick={handleSearchNewLink}
+              className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-600"
+            >
+              Search New Link
             </button>
           </div>
         </div>
