@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+all_links.py
+api.txt
+scrap.py
+.env
