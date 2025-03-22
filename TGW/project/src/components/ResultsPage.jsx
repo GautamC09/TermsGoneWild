@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Filter, X } from 'lucide-react';
+import { Filter, X, ArrowLeft, Search } from 'lucide-react'; // Import Search icon
 
 const ResultsPage = () => {
   const [clauses, setClauses] = useState([]);
@@ -12,40 +12,18 @@ const ResultsPage = () => {
   const [error, setError] = useState(null);
 
   const location = useLocation();
-  const url = location.state?.url;
+  const { analysisResults, url, error: locationError } = location.state || { analysisResults: [], url: '', error: null };
   const navigate = useNavigate();
 
-  const hasFetched = useRef(false);
-
   useEffect(() => {
-    if (url && !hasFetched.current) {
-      hasFetched.current = true;
-      const fetchData = async () => {
-        try {
-          const response = await fetch('http://localhost:5000/api/analyze', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ url }),
-          });
-
-          if (!response.ok) {
-            throw new Error('Failed to fetch data');
-          }
-
-          const data = await response.json();
-          setClauses(data);
-        } catch (error) {
-          setError(error.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchData();
+    if (analysisResults) {
+      setClauses(analysisResults);
+      setLoading(false);
+    } else if (locationError) {
+      setError(locationError);
+      setLoading(false);
     }
-  }, [url]);
+  }, [analysisResults, locationError]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -57,41 +35,37 @@ const ResultsPage = () => {
 
   const handleSummaryClick = async () => {
     try {
-      // First, get the analysis results
-      const analysisResponse = await fetch('http://localhost:5000/api/analyze', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ url }),
-      });
-  
-      if (!analysisResponse.ok) {
-        throw new Error('Failed to fetch analysis results');
-      }
-  
-      const analysisResults = await analysisResponse.json();
-  
-      // Then, generate the summary
+      const formattedClauses = clauses.map(clause => ({
+        Clause: clause.Clause,
+        Concern: clause.Concern,
+        "Risk Level": clause["Risk Level"],
+        Explanation: clause.Explanation
+      }));
+
+      console.log("Sending formatted analysis_results to /api/summary:", formattedClauses);
+
       const summaryResponse = await fetch('http://localhost:5000/api/summary', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ analysis_results: analysisResults }),
+        body: JSON.stringify({ analysis_results: formattedClauses }),
       });
-  
+
       if (!summaryResponse.ok) {
         throw new Error('Failed to generate summary');
       }
-  
+
       const summaryData = await summaryResponse.json();
-  
-      // Navigate to the summary page with the summary data
-      navigate('/summary', { state: { summary: summaryData } });
+      navigate('/summary', { state: { summary: summaryData.summary, url } });
     } catch (error) {
       console.error('Error:', error);
     }
+  };
+
+  const handleSearchNewLink = () => {
+    // Navigate back to the home page to search for a new link
+    navigate('/');
   };
 
   const filteredClauses = clauses.filter(clause => {
@@ -101,17 +75,65 @@ const ResultsPage = () => {
     );
   });
 
+  // Display loading state
   if (loading) {
     return <div className="py-24 text-center">Loading...</div>;
   }
 
+  // Display error state
   if (error) {
-    return <div className="py-24 text-center text-red-500">Error: {error}</div>;
+    return (
+      <div className="py-24 text-center">
+        <p className="text-lg text-muted-foreground">
+          {error}
+        </p>
+        <button
+          onClick={() => navigate('/')}
+          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-600"
+        >
+          Search New Link
+        </button>
+      </div>
+    );
   }
 
+  // Display no results state
+  if (clauses.length === 0) {
+    return (
+      <div className="py-24 text-center">
+        <p className="text-lg text-muted-foreground">
+          No concerning clauses found in the provided document.
+        </p>
+        <button
+          onClick={() => navigate('/')}
+          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-full text-sm hover:bg-blue-600"
+        >
+          Search New Link
+        </button>
+      </div>
+    );
+  }
+
+  // Display analysis results
   return (
     <section className="py-24 bg-white">
       <div className="container mx-auto px-6">
+        {/* Back Button */}
+        <button
+          onClick={() => navigate(-1)} // Go back to the previous page
+          className="flex items-center text-sm text-muted-foreground hover:text-foreground mb-8"
+        >
+          <ArrowLeft size={16} className="mr-2" /> Back
+        </button>
+
+        {/* Search New Link Button */}
+        <button
+          onClick={handleSearchNewLink}
+          className="flex items-center text-sm text-muted-foreground hover:text-foreground mb-8"
+        >
+          <Search size={16} className="mr-2" /> Search New Link
+        </button>
+
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-display font-bold">Analysis Results</h2>
           <div className="flex space-x-4">

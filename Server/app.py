@@ -66,23 +66,27 @@ def split_text(text, max_length=6000):
         chunks.append(" ".join(current_chunk))
     return chunks
 
-def analyze_terms_with_groq(text_chunk):
+def analyze_terms_with_groq(text_chunk, url):
     """Send text chunk to Groq API for analysis"""
     prompt = """
-    Analyze this section:
+    You are a legal analysis assistant. Your task is to analyze the provided text and determine if it is from a terms and conditions or privacy policy page. If it is not, respond with a message indicating that the provided link is not valid for analysis.
 
+    Website Link: {url}
+
+    Text to Analyze:
     {text}
 
-    Highlight any clauses that have privacy issues, financial concerns, legal risks, or unfair terms.
-    
-    Format your response ONLY as a valid JSON array of objects, where each object has these exact fields:
-    - "Clause": the exact text of the concerning clause
-    - "Concern": the category of concern (privacy, financial, legal, unfair)
-    - "Risk Level": assessment as "Low", "Medium", or "High"
-    - "Explanation": brief explanation of the issue
-    
-    If no concerning clauses are found, return [].
-    
+    Instructions:
+    1. Check if the text is from a terms and conditions or privacy policy page.
+    2. If it is not, respond with: "This page does not appear to be a terms and conditions or privacy policy page. Please provide a valid link."
+    3. If it is, analyze the text and highlight any clauses that have privacy issues, financial concerns, legal risks, or unfair terms.
+    4. Format your response ONLY as a valid JSON array of objects, where each object has these exact fields:
+       - "Clause": the exact text of the concerning clause
+       - "Concern": the category of concern (privacy, financial, legal, unfair)
+       - "Risk Level": assessment as "Low", "Medium", or "High"
+       - "Explanation": brief explanation of the issue
+    5. If no concerning clauses are found, return [].
+
     VERY IMPORTANT: Your entire response must be ONLY the JSON array with no additional text, comments, or explanation.
     """
 
@@ -91,7 +95,7 @@ def analyze_terms_with_groq(text_chunk):
             model="llama-3.3-70b-versatile", 
             messages=[
                 {"role": "system", "content": "You are a legal analysis assistant that only responds with valid JSON."},
-                {"role": "user", "content": prompt.format(text=text_chunk)}
+                {"role": "user", "content": prompt.format(url=url, text=text_chunk)}
             ],
             max_tokens=6000,
             temperature=0.1
@@ -99,6 +103,10 @@ def analyze_terms_with_groq(text_chunk):
         
         # Get the response content
         content = response.choices[0].message.content.strip()
+        
+        # Check if the response is a plain text message (invalid page)
+        if "This page does not appear to be a terms and conditions or privacy policy page" in content:
+            return None  # Indicate that the page is not valid for analysis
         
         # Try to parse the JSON
         try:
@@ -119,7 +127,7 @@ def analyze_terms_with_groq(text_chunk):
     except Exception as e:
         print(f"API error: {str(e)}")
         return []
-
+    
 @app.route('/api/analyze', methods=['POST'])
 def analyze_url():
     data = request.json
@@ -136,18 +144,26 @@ def analyze_url():
         print(f"Analyzing {len(text_chunks)} chunks of text...")
         
         all_analyses = []
+        invalid_page = False
         
         for i, chunk in enumerate(text_chunks):
             print(f"\nAnalyzing chunk {i + 1}/{len(text_chunks)}...")
-            analysis = analyze_terms_with_groq(chunk)
+            analysis = analyze_terms_with_groq(chunk, url)  # Pass the URL to the function
             
-            if analysis:
+            if analysis is None:
+                # The page is not a valid terms and conditions or privacy policy page
+                invalid_page = True
+                break
+            elif analysis:
                 print(f"Found {len(analysis)} concerning clauses")
                 all_analyses.extend(analysis)
             else:
                 print("No concerning clauses found in this chunk")
         
-        if all_analyses:
+        if invalid_page:
+            print("\nThe provided link is not a valid terms and conditions or privacy policy page.")
+            return jsonify({"error": "The provided link is not a valid terms and conditions or privacy policy page."}), 400
+        elif all_analyses:
             print(f"\nAnalysis complete. Found {len(all_analyses)} concerning clauses in total.")
             return jsonify(all_analyses)
         else:
@@ -155,8 +171,7 @@ def analyze_url():
             return jsonify([])
     else:
         return jsonify({"error": "Failed to scrape the website"}), 500
-
-
+    
 @app.route('/api/summary', methods=['POST'])
 def generate_summary():
     data = request.json
@@ -167,67 +182,26 @@ def generate_summary():
     
     # Prepare the prompt for the LLM
     prompt = """
-            Analyze the following clauses and generate a summary report:
+    Analyze the following clauses and generate a plain text summary:
 
-            {analysis_results}
+    {analysis_results}
 
-            The summary should include:
-            1. A breakdown of concerns by category (privacy, financial, legal, unfair)
-            2. The total number of clauses for each concern category
-            3. The distribution of risk levels (Low, Medium, High)
-            4. Any notable patterns or recurring issues
+    The summary should include:
+    1. A breakdown of concerns by category (privacy, financial, legal, unfair).
+    2. The total number of clauses for each concern category.
+    3. The distribution of risk levels (Low, Medium, High).
+    4. Any notable patterns or recurring issues.
+    5. A clear explanation of the risks and a recommendation on whether the user should agree to the terms or not.
 
-            Format your response as a JSON object with the following structure:
-            {
-                "summary": {
-                    "concerns": {
-                        "privacy": {
-                            "count": <number>,
-                            "risk_levels": {
-                                "Low": <number>,
-                                "Medium": <number>,
-                                "High": <number>
-                            }
-                        },
-                        "financial": {
-                            "count": <number>,
-                            "risk_levels": {
-                                "Low": <number>,
-                                "Medium": <number>,
-                                "High": <number>
-                            }
-                        },
-                        "legal": {
-                            "count": <number>,
-                            "risk_levels": {
-                                "Low": <number>,
-                                "Medium": <number>,
-                                "High": <number>
-                            }
-                        },
-                        "unfair": {
-                            "count": <number>,
-                            "risk_levels": {
-                                "Low": <number>,
-                                "Medium": <number>,
-                                "High": <number>
-                            }
-                        }
-                    },
-                    "total_clauses": <number>,
-                    "notable_patterns": "<description of any notable patterns or recurring issues>"
-                }
-            }
-
-            VERY IMPORTANT: Your response must be ONLY the JSON object with no additional text, comments, or explanation.
-            """
+    IMPORTANT: Your response should be in plain text and should NOT include any JSON formatting or code blocks.
+    """
 
     try:
         # Send the analysis results to the LLM for summarization
         response = groq_client.chat.completions.create(
-            model="llama-3.3-70b-versatile", 
+            model="mistral-saba-24b", 
             messages=[
-                {"role": "system", "content": "You are a legal analysis assistant that generates summary reports in JSON format."},
+                {"role": "system", "content": "You are a legal analysis assistant that generates plain text summary reports."},
                 {"role": "user", "content": prompt.format(analysis_results=json.dumps(analysis_results))}
             ],
             max_tokens=6000,
@@ -236,30 +210,15 @@ def generate_summary():
         
         # Get the response content
         content = response.choices[0].message.content.strip()
-        print("Raw LLM Response:", content)  # Log the raw response
         
-        # Try to parse the JSON
-        try:
-            # Find JSON object in the response if it's not a clean JSON
-            if not content.startswith('{'):
-                match = re.search(r'\{(.*?)\}', content, re.DOTALL)
-                if match:
-                    content = match.group(0)
-            
-            # Parse the JSON
-            summary_data = json.loads(content)
-            return jsonify(summary_data)
-        except json.JSONDecodeError as e:
-            print(f"JSON parsing error: {str(e)}")
-            print(f"Raw response: {content}")
-            return jsonify({
-                "error": "Failed to generate summary due to invalid JSON response",
-                "raw_response": content  # Optionally include the raw response for debugging
-            }), 500
+        # Return the plain text summary
+        return jsonify({"summary": content}), 200
             
     except Exception as e:
         print(f"API error: {str(e)}")
         return jsonify({"error": "Failed to generate summary"}), 500
+    
+
 # For direct script execution (development)
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

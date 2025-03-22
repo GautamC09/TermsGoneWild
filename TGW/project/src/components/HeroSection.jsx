@@ -6,18 +6,52 @@ import { useNavigate } from 'react-router-dom';
 const HeroSection = () => {
   const [urlInput, setUrlInput] = useState('');
   const navigate = useNavigate();
-  const [url, setUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('URL submitted:', urlInput);
 
-    // Navigate to the results page with the URL
-    navigate('/results', { state: { url: urlInput } });
-  };  
+  const isValidUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!isValidUrl(urlInput)) {
+      setError('Please enter a valid URL.');
+      return;
+    }
+
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:5000/api/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: urlInput }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const data = await response.json();
+      navigate('/results', { state: { analysisResults: data, url: urlInput } });
+    } catch (error) {
+      setError('Failed to analyze the URL. Please try again.');
+      console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <section className="relative pt-32 pb-20 overflow-hidden pattern-bg">
@@ -55,12 +89,14 @@ const HeroSection = () => {
                     "bg-primary text-white hover:bg-primary/90" : 
                     "bg-muted text-muted-foreground"
                 )}
-                disabled={!urlInput.trim()}
+                disabled={!urlInput.trim() || isLoading}
               >
-                Analyze <ArrowRight size={16} className="ml-1 inline" />
+                {isLoading ? 'Analyzing...' : 'Analyze'} <ArrowRight size={16} className="ml-1 inline" />
               </button>
             </div>
           </form>
+          
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
           
           <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
             <div className="flex items-center">
