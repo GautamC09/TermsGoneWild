@@ -32,3 +32,13 @@
    ```bash
    git clone https://github.com/your-username/TermsGoneWild.git
    cd TermsGoneWild
+
+2. **Set up the backend**:
+   -Navigate to the backend directory:
+   ```bash
+   cd backend
+
+   -Install Python dependencies:
+   ```bash
+   pip install -r requirements.txt
+   
