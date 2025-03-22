@@ -16,7 +16,7 @@ CORS(app)
 CONFIG = {
     "GROQ_API_KEY": "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",
     "GROQ_MODEL": "llama-3.3-70b-versatile",
-    "TOKEN_LIMIT": 3000,
+    "TOKEN_LIMIT": 30000,
     "MAX_RETRIES": 3,
     "RETRY_DELAY": 20
 }
@@ -40,20 +40,22 @@ def get_all_text(url: str) -> Tuple[Optional[str], Optional[str]]:
         print(f"Requests failed: {str(e)}. Trying Selenium...")
         
         # Fallback to Selenium
+        driver = None
         try:
             options = Options()
-            options.add_argument("--headless")  # Run without UI
+            options.add_argument("--headless")
             options.add_argument("--disable-gpu")
             options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
             driver = webdriver.Chrome(options=options)
             driver.get(url)
             time.sleep(2)  # Wait for page to load
             text = driver.find_element("tag name", "body").text
-            driver.quit()
             return ' '.join(text.split()), None
         except Exception as e:
             return None, f"Failed to retrieve webpage: {str(e)}. Please try pasting the text manually."
-
+        finally:
+            if driver is not None:
+                driver.quit()
 def split_text(text: str, max_tokens: int = CONFIG["TOKEN_LIMIT"]) -> List[str]:
     """Split text into token-limited chunks efficiently."""
     words = text.split()
@@ -122,18 +124,26 @@ def analyze_terms(text: str) -> Tuple[Optional[str], Optional[str]]:
 def analyze():
     """API endpoint to analyze URL content or manually provided text."""
     try:
+        # Parse incoming JSON
         data = request.get_json()
-        if not data or ("url" not in data and "text" not in data):
+        if not data:
+            return jsonify({"error": "No JSON data provided"}), 400
+        if "url" not in data and "text" not in data:
             return jsonify({"error": "URL or text is required"}), 400
+
+        print(f"Received request: {data}")  # Debug log
 
         # Use provided text or fetch from URL
         if "text" in data and data["text"]:
             text = data["text"]
         else:
+            if not data.get("url", "").startswith("http"):
+                return jsonify({"error": "Invalid URL format"}), 400
             text, error = get_all_text(data["url"])
             if error:
                 return jsonify({"error": error}), 400
 
+        # Analyze the text
         analysis, error = analyze_terms(text)
         if error:
             return jsonify({"error": error}), 500
@@ -141,7 +151,5 @@ def analyze():
         return jsonify({"analysis": json.loads(analysis)})
     
     except Exception as e:
-        return jsonify({"error": f"Server error: {str(e.Find)}"}), 500
-
-if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=5000)
+        print(f"Unexpected error: {str(e)}")  # Debug log
+        return jsonify({"error": f"Server error: {str(e)}"}), 500

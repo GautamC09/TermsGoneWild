@@ -1,0 +1,182 @@
+[
+  {
+    "Clause": "You understand that through your use of the Services, you consent to the collection and use of this information as set forth in the Privacy Policy.",
+    "Concern": "privacy",
+    "Risk Level": "Medium",
+    "Explanation": "Users may not be fully aware of the data collection and usage practices."
+  },
+  {
+    "Clause": "We reserve all rights not expressly granted to you by these Terms.",
+    "Concern": "unfair",
+    "Risk Level": "Low",
+    "Explanation": "Broad reservation of rights may lead to unforeseen restrictions on users."
+  },
+  {
+    "Clause": "You grant Reddit the following license to use that Content: When Your Content is created with or submitted to the Services, you grant us a worldwide, royalty-free, perpetual, irrevocable, non-exclusive, transferable, and sublicensable license to use, copy, modify, adapt, prepare derivative works of, distribute, store, perform, and display Your Content",
+    "Concern": "financial",
+    "Risk Level": "High",
+    "Explanation": "Users may unintentionally surrender valuable intellectual property rights."
+  },
+  {
+    "Clause": "You may not license, sell, or transfer your Account without our prior written approval.",
+    "Concern": "unfair",
+    "Risk Level": "Medium",
+    "Explanation": "Restrictions on account transfer may limit users' control over their accounts."
+  },
+  {
+    "Clause": "You acknowledge and agree that we will not assist you in any way with your Promotion, and you agree to conduct your Promotion at your own risk.",
+    "Concern": "legal",
+    "Risk Level": "High",
+    "Explanation": "Users may be exposed to unforeseen liabilities when conducting promotions."
+  },
+  {
+    "Clause": "We may, in our sole discretion, delete, deem your content ineligible for monetization, or remove Your Content, at any time and for any reason",
+    "Concern": "unfair",
+    "Risk Level": "Medium",
+    "Explanation": "Arbitrary removal of content may lead to unfair treatment of users."
+  },
+  {
+    "Clause": "You agree that we may use such ideas, suggestions, and feedback without compensation or obligation to you.",
+    "Concern": "financial",
+    "Risk Level": "Medium",
+    "Explanation": "Users may not receive fair compensation for their contributions."
+  },
+  {
+    "Clause": "You understand that through your use of the Services, you consent to the collection and use of this information as set forth in the Privacy Policy.",
+    "Concern": "privacy",
+    "Risk Level": "Medium",
+    "Explanation": "Users may not be fully aware of the data collection and usage practices."
+  },
+  {
+    "Clause": "If you stop using the Services without deactivating your Account, your Account may be deactivated due to prolonged inactivity.",
+    "Concern": "privacy",
+    "Risk Level": "Low",
+    "Explanation": "Inactive accounts may still retain user data."
+  },
+  {
+    "Clause": "IN NO EVENT WILL ANY OF THE REDDIT ENTITIES BE LIABLE TO YOU FOR ANY INDIRECT, CONSEQUENTIAL, EXEMPLARY, INCIDENTAL, SPECIAL, OR PUNITIVE DAMAGES, OR LOST PROFITS ARISING FROM OR RELATING TO THESE TERMS OR THE SERVICES",
+    "Concern": "legal",
+    "Risk Level": "High",
+    "Explanation": "Reddit entities are not liable for significant damages, which may leave users without recourse."
+  },
+  {
+    "Clause": "You agree to defend, indemnify, and hold Reddit, its affiliates, and their respective, directors, officers, employees, affiliates, agents, contractors, third-party service providers, and licensors (the \"Reddit Entities\") harmless from and against any claim or demand made by any third party",
+    "Concern": "financial",
+    "Risk Level": "High",
+    "Explanation": "Users may be required to pay significant costs to defend Reddit entities."
+  },
+  {
+    "Clause": "THE SERVICES ARE PROVIDED \"AS IS\" AND \"AS AVAILABLE\" WITHOUT REPRESENTATIONS, WARRANTIES, OR CONDITIONS OF ANY KIND, WHETHER EXPRESS, IMPLIED, LEGAL, OR STATUTORY",
+    "Concern": "unfair",
+    "Risk Level": "Medium",
+    "Explanation": "Reddit does not provide warranties or guarantees for the services, which may be unfair to users."
+  },
+  {
+    "Clause": "We may freely assign any of our rights and obligations under these Terms",
+    "Concern": "unfair",
+    "Risk Level": "Low",
+    "Explanation": "Reddit can assign its rights and obligations without user consent, which may be unfair."
+  },
+  {
+    "Clause": "To the fullest extent permitted by applicable law, any claims arising out of or relating to these Terms or the Services will be governed by the laws of the State of California",
+    "Concern": "legal",
+    "Risk Level": "Medium",
+    "Explanation": "Users may be subject to California laws, which may not be favorable to them."
+  },
+  {
+    "Clause": "You may not assign or transfer any of your rights or obligations under these Terms without our consent",
+    "Concern": "unfair",
+    "Risk Level": "Low",
+    "Explanation": "Users are restricted from assigning their rights without Reddit's consent, which may be unfair."
+  },
+  {
+    "Clause": "We may make recommendations to make your experience on Reddit more relevant based on these and other factors",
+    "Concern": "privacy",
+    "Risk Level": "Medium",
+    "Explanation": "Collection and use of personal data for targeted recommendations"
+  },
+  {
+    "Clause": "You grant Reddit the following license to use that Content: When Your Content is created with or submitted to the Services, you grant us a worldwide, royalty-free, perpetual, irrevocable, non-exclusive, transferable, and sublicensable license",
+    "Concern": "legal",
+    "Risk Level": "High",
+    "Explanation": "Broad and perpetual license to use user-generated content without compensation"
+  },
+  {
+    "Clause": "You are solely responsible for the information associated with your Account and anything that happens related to your Account",
+    "Concern": "legal",
+    "Risk Level": "Medium",
+    "Explanation": "Users are liable for all activity on their account, even if not authorized"
+  },
+  {
+    "Clause": "We reserve the right to review, screen, edit, or monitor Your Content, but we do not necessarily review all of it at the time it is submitted to the Services",
+    "Concern": "privacy",
+    "Risk Level": "Low",
+    "Explanation": "Potential for monitoring of user-generated content"
+  },
+  {
+    "Clause": "You agree that we may use such ideas, suggestions, and feedback without compensation or obligation to you",
+    "Concern": "unfair",
+    "Risk Level": "Medium",
+    "Explanation": "Users surrender rights to their ideas and feedback without compensation"
+  },
+  {
+    "Clause": "You will not license, sell, or transfer your Account without our prior written approval",
+    "Concern": "financial",
+    "Risk Level": "Low",
+    "Explanation": "Restrictions on transferring or selling user accounts"
+  },
+  {
+    "Clause": "By purchasing or using Paid Services, you further agree to the Econ Terms and, if applicable, the Previews Terms",
+    "Concern": "financial",
+    "Risk Level": "Medium",
+    "Explanation": "Additional terms and conditions apply to paid services"
+  },
+  {
+    "Clause": "You agree to defend, indemnify, and hold Reddit, its affiliates, and their respective directors, officers, employees, affiliates, agents, contractors, third-party service providers, and licensors harmless from and against any claim or demand",
+    "Concern": "legal",
+    "Risk Level": "High",
+    "Explanation": "Broad indemnification clause that may leave users liable for significant costs"
+  },
+  {
+    "Clause": "Reddit isn\u2019t liable for damages that result from a non-material breach of any other applicable duty of care",
+    "Concern": "legal",
+    "Risk Level": "Medium",
+    "Explanation": "Limitation of liability for non-material breaches of duty of care"
+  },
+  {
+    "Clause": "To the fullest extent permitted by applicable law, we may suspend or terminate your Account, moderator status, or ability to access or use the Services at any time for any or no reason, including for violating these Terms or our Reddit Rules.",
+    "Concern": "legal",
+    "Risk Level": "High",
+    "Explanation": "The clause gives Reddit broad discretion to suspend or terminate accounts without clear justification."
+  },
+  {
+    "Clause": "You may not assign or transfer any rights or obligations under these Terms without Reddit\u2019s prior written consent.",
+    "Concern": "unfair",
+    "Risk Level": "Medium",
+    "Explanation": "The clause restricts users' ability to assign or transfer their rights, while Reddit has more flexibility."
+  },
+  {
+    "Clause": "Reddit may, without restriction, assign any of our rights and obligations under these Terms, at its sole discretion, with 30 days\u2019 prior notice.",
+    "Concern": "unfair",
+    "Risk Level": "Medium",
+    "Explanation": "The clause allows Reddit to assign its rights and obligations without user consent, while users are restricted."
+  },
+  {
+    "Clause": "If any part of these Terms is held to be invalid or unenforceable, the unenforceable part will be given effect to the greatest extent possible, and the remaining parts will remain in full force and effect.",
+    "Concern": "legal",
+    "Risk Level": "Low",
+    "Explanation": "The clause is a standard severability clause, but may still pose some risk if a significant part of the Terms is held invalid."
+  },
+  {
+    "Clause": "Our failure to exercise or enforce any right or provision of these Terms will not operate as a waiver of such right or provision.",
+    "Concern": "legal",
+    "Risk Level": "Low",
+    "Explanation": "The clause clarifies that Reddit's inaction does not imply a waiver of its rights, which is a standard contractual provision."
+  },
+  {
+    "Clause": "You must also agree to the Reddit Econ Terms. If you use any preview features, you must also agree to the Reddit Previews Terms. If you advertise on the Services, you must also agree to the Reddit Advertising Platform Terms.",
+    "Concern": "financial",
+    "Risk Level": "Medium",
+    "Explanation": "The clause requires users to agree to additional terms for specific services, which may include financial obligations or risks."
+  }
+]
