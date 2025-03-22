@@ -53,4 +53,4 @@ firebase.js
 all_links.py
 api.txt
 scrap.py
-.env
+*.env
